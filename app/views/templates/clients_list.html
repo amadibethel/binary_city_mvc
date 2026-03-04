@@ -6,13 +6,15 @@
   </div>
 
   {% if clients|length == 0 %}
-    <p class="muted">No client(s) found.</p>
+    <!-- Spec: show text only, without column headings -->
+    <p>No client(s) found.</p>
   {% else %}
     <table class="table">
       <thead>
         <tr>
           <th>Name</th>
-          <th>Client Code</th>
+          <th>Client code</th>
+          <th class="center">No. of linked contacts</th>
           <th></th>
         </tr>
       </thead>
@@ -21,7 +23,10 @@
           <tr>
             <td>{{ c.name }}</td>
             <td>{{ c.code }}</td>
-            <td><a href="{{ url_for('clients.edit_client', client_id=c.id) }}">View</a></td>
+            <td class="center">{{ c.linked_contacts }}</td>
+            <td>
+              <a href="{{ url_for('clients.edit_client', client_id=c.id) }}">View</a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
