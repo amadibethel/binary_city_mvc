@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h1>{{ "New Client" if not client else "Client Form" }}</h1>
+
+  <div class="tabs" data-tabs>
+    <button class="tab active" data-tab="general">General</button>
+    <button class="tab" data-tab="contacts" {% if not client %}disabled title="Save client first"{% endif %}>
+      Contact(s)
+    </button>
+  </div>
+
+  <!-- TAB: GENERAL -->
+  <section class="tab-panel active" id="tab-general">
+    <form method="post" action="{{ url_for('clients.create_client') if not client else url_for('clients.update_client', client_id=client.id) }}">
+      <label>
+        Name <span class="req">*</span>
+        <input type="text" name="name" value="{{ client.name if client else '' }}" required>
+      </label>
+
+      {% if client %}
+        <label>
+          Client code <span class="req">*</span>
+          <input type="text" value="{{ client.code }}" readonly>
+        </label>
+      {% endif %}
+
+      <button class="btn primary" type="submit">{{ "Save" if not client else "Update" }}</button>
+    </form>
+  </section>
+
+  <!-- TAB: CONTACT(S) -->
+  <section class="tab-panel" id="tab-contacts">
+    {% if not client %}
+      <p class="muted">Save the client first to manage linked contacts.</p>
+    {% else %}
+
+      <div class="card">
+        <h3>Link a contact</h3>
+        <div class="row gap">
+          <select id="linkContactSelect">
+            <option value="">-- Select contact --</option>
+            {% for u in unlinked_contacts %}
+              <option value="{{ u.id }}">{{ u.surname }} {{ u.name }} ({{ u.email }})</option>
+            {% endfor %}
+          </select>
+          <button class="btn" type="button"
+                  onclick="linkContact({{ client.id }})">Link Contact</button>
+        </div>
+        <p class="muted small">One contact can be linked to multiple clients.</p>
+      </div>
+
+      <h3>Linked contacts</h3>
+
+      {% if contacts|length == 0 %}
+        <p>No contacts found.</p>
+      {% else %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Contact Full Name</th>
+              <th>Contact email address</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="linkedContactsBody">
+            {% for c in contacts %}
+              <tr data-contact-id="{{ c.id }}">
+                <td>{{ c.surname }} {{ c.name }}</td>
+                <td>{{ c.email }}</td>
+                <td>
+                  <a href="#" onclick="unlinkContact(event, {{ client.id }}, {{ c.id }})">Unlink</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    {% endif %}
+  </section>
+{% endblock %}

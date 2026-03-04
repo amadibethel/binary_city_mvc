@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="row between">
+    <h1>Clients</h1>
+    <a class="btn" href="{{ url_for('clients.new_client') }}">Create new client</a>
+  </div>
+
+  {% if clients|length == 0 %}
+    <p class="muted">No client(s) found.</p>
+  {% else %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Client Code</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in clients %}
+          <tr>
+            <td>{{ c.name }}</td>
+            <td>{{ c.code }}</td>
+            <td><a href="{{ url_for('clients.edit_client', client_id=c.id) }}">View</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}

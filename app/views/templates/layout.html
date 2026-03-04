@@ -1,0 +1,26 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{{ title or "Client/Contact Management" }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Client/Contact MVC</div>
+    <nav>
+      <a href="{{ url_for('clients.list_clients') }}">Clients</a>
+      <a href="{{ url_for('contacts.list_contacts') }}">Contacts</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% include "_flash.html" %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

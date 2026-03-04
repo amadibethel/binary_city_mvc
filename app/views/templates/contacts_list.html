@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="row between">
+    <h1>Contacts</h1>
+    <a class="btn" href="{{ url_for('contacts.new_contact') }}">Create new contact</a>
+  </div>
+
+  {% if contacts|length == 0 %}
+    <p>No contact(s) found.</p>
+  {% else %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Email address</th>
+          <th class="center">No. of linked clients</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in contacts %}
+          <tr>
+            <td>{{ c.name }}</td>
+            <td>{{ c.surname }}</td>
+            <td>{{ c.email }}</td>
+            <td class="center">{{ c.linked_clients }}</td>
+            <td><a href="{{ url_for('contacts.edit_contact', contact_id=c.id) }}">View</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}
